@@ -61,10 +61,26 @@ router.post('/encode', function(req, res) {
                             doc_path + 'public/photo/encoded_' + ts + '.png'
                         ], function(ret) {
                             console.log(ret);
+                        
+			  console.info('Call Shell Decode');
+
+                          shell( '/usr/bin/python', [
+                            doc_path + 'script/watermark.py',
+                            '--cmd',
+                            'decode',
+                            '--ori',
+                            base_photo_new,
+                            '--im',
+                            doc_path + 'public/photo/encoded_' + ts + '.png',
+			    '--res',
+                            doc_path + 'public/photo/decoded_' + ts + '.png'
+                          ], function(ret) {
+                            console.log(ret);
                             res.render('encode', {
                                 ts: ts
                             });
-                        });
+                       	  });
+			 });
                     }
                 }
             });
