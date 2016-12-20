@@ -8,7 +8,7 @@
     <title>InvWatermark</title>
 
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -41,12 +41,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">InvWatermark</a>
+          <a class="navbar-brand" href="/">InvWatermark</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Encode</a></li>
-            <li><a href="/decode">Decode</a></li>
+            <li><a href="/">Encode</a></li>
+            <li class="active"><a href="/decode">Decode</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -60,52 +60,20 @@
         You wont see it unless you decode it with special program</p>
       </div>
 
-      <form action="/upload/encode" method="post" enctype="multipart/form-data">
-
-        <div class="row">
-          <div class="col-md-4 col-md-offset-2">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Base photo</h3>
-              </div>
-              <div class="panel-body">
-                <input type="file" accept="image/*" name="base_photo">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Watermark photo</h3>
-              </div>
-              <div class="panel-body">
-                <input type="file" accept="image/*" name="watermark_photo">
-              </div>
-            </div>
-          </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Decoded photo</h3>
         </div>
-
-        <div class="row">
-          <div class="col-md-4 col-md-offset-4">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Submit</h3>
-              </div>
-              <div class="panel-body btn-panel">
-                <button type="submit" class="btn btn-default">Submit</button>
-              </div>
-            </div>
-          </div>
+        <div class="panel-body">
+          <img src="/photo/decoded_<%= ts %>.png" alt="">
         </div>
-
-      </form>
+      </div>
 
     </div><!-- /.container -->
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
   </body>
 </html>
