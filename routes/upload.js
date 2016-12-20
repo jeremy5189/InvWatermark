@@ -26,21 +26,43 @@ router.post('/encode', function(req, res) {
     var base_photo_new = '/tmp/base_photo_' + ts + '.png',
     	watermark_photo_new = '/tmp/watermark_photo_' + ts + '.png';
 
+    var status = true;
+
     base_photo.mv(base_photo_new, function(err) {
         if (err) {
+            status = false;
             res.status(500).send(err);
         }
         else {
        		console.info('base_photo ok');
-        }
-    });
 
-    watermark_photo.mv(watermark_photo_new, function(err) {
-        if (err) {
-            res.status(500).send(err);
-        }
-        else {
-        	console.info('watermark_photo ok');
+            watermark_photo.mv(watermark_photo_new, function(err) {
+                if (err) {
+                    status = false;
+                    res.status(500).send(err);
+                }
+                else {
+                    console.info('watermark_photo ok');
+
+                    if(status) {
+
+                        console.info('Call Shell');
+
+                        shell( '/usr/bin/python', [
+                            '/home/jeremy/BlindWaterMark/bwm.py',
+                            'encode',
+                            base_photo_new,
+                            watermark_photo_new,
+                            '/home/jeremy/InvWatermark/public/photo/encoded_' + ts + '.png'
+                        ], function(ret) {
+                            console.log(ret);
+                            res.render('upload', {
+                                ts: ts
+                            });
+                        });
+                    }
+                }
+            });
         }
     });
 
