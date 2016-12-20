@@ -44,7 +44,22 @@ router.post('/encode', function(req, res) {
         }
     });
 
-    res.send('<img src="file:///private/' + base_photo_new + '" alt=""><img src="file:///private/' + watermark_photo_new + '" alt="">');
+
 });
+
+function shell (cmd, args, callback ) {
+
+	var spawn = require('child_process').spawn;
+    var child = spawn(cmd, args);
+    var resp = "";
+
+    child.stdout.on('data', function (buffer) { 
+        resp += buffer.toString() 
+    });
+
+    child.stdout.on('end', function() { 
+        callback (resp) 
+    });
+} 
 
 module.exports = router;
