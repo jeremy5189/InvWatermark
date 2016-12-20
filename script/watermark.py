@@ -21,7 +21,7 @@ class InvisibleWaterMark:
         wm_h, wm_w = watermark.shape[0], watermark.shape[1]
         m, n = range(height/2), range(width)
 
-        watermark_random_f = numpy.zeros(img.shape)
+        watermark_random = numpy.zeros(img.shape)
 
         #  使用亂數種子產生亂數
         random.seed(self.seed)
@@ -30,21 +30,23 @@ class InvisibleWaterMark:
         random.shuffle(m)
         random.shuffle(n)
 
+        #  將浮水印的圖片依據亂數種子產生新的頻率圖片
         for i in range(height/2):
             for j in range(width):
                 if m[i] < wm_h and n[j] < wm_w:
-                    watermark_random_f[i][j] = watermark[m[i]][n[j]]
-                    watermark_random_f[height - i - 1][width - j - 1] = watermark_random_f[i][j]
+                    watermark_random[i][j] = watermark[m[i]][n[j]]
+                    watermark_random[height - i - 1][width - j - 1] = watermark_random[i][j]
 
         #  進行二維快速傅立葉轉換，將圖案變成頻率
         img_f = numpy.fft.fft2(img)
 
         # 將頻率圖案 加上 浮水印雜訊 並且放大倍數
-        res = img_f + watermark_random_f * 10
+        res = img_f + watermark_random * 3
 
         # 將傅立葉頻率 轉換為圖片
         img_wm = numpy.real(numpy.fft.ifft2(res))
 
+        #  寫入檔案
         cv2.imwrite(result, img_wm, [int(cv2.IMWRITE_JPEG_QUALITY), 100])
 
     def decode(self, image, encode_image, result):
@@ -53,16 +55,19 @@ class InvisibleWaterMark:
 
         h, w = img.shape[0], img.shape[1]
 
+        # 將原始圖片 以及 浮水印圖片 進行傅立葉轉換，並且相減取得頻率
         img_f = numpy.fft.fft2(img)
         img_wm_f = numpy.fft.fft2(img_wm)
-        watermark = numpy.real((img_f - img_wm_f) / 1)
+        watermark = numpy.real((img_f - img_wm_f))
         wm = numpy.zeros(watermark.shape)
-        #  產生亂數
+
+        #  依照之前產生的亂數種子解密
         m, n = range(h/2), range(w)
         random.seed(self.seed)
         random.shuffle(m)
         random.shuffle(n)
 
+        #  依照相同亂數解出正確的圖片
         for i in range(h / 2):
             for j in range(w):
                 wm[m[i]][n[j]] = watermark[i][j]
