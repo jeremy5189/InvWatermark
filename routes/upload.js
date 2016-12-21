@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var doc_path = '/home/jeremy/InvWatermark/';
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -49,17 +50,37 @@ router.post('/encode', function(req, res) {
                         console.info('Call Shell Encode');
 
                         shell( '/usr/bin/python', [
-                            '/home/jeremy/BlindWaterMark/bwm.py',
+                            doc_path + 'script/watermark.py',
+			    '--cmd',
                             'encode',
+			    '--ori',
                             base_photo_new,
+			    '--im',
                             watermark_photo_new,
-                            '/home/jeremy/InvWatermark/public/photo/encoded_' + ts + '.png'
+		            '--res',
+                            doc_path + 'public/photo/encoded_' + ts + '.png'
                         ], function(ret) {
+                            console.log(ret);
+                        
+			  console.info('Call Shell Decode');
+
+                          shell( '/usr/bin/python', [
+                            doc_path + 'script/watermark.py',
+                            '--cmd',
+                            'decode',
+                            '--ori',
+                            base_photo_new,
+                            '--im',
+                            doc_path + 'public/photo/encoded_' + ts + '.png',
+			    '--res',
+                            doc_path + 'public/photo/decoded_' + ts + '.png'
+                          ], function(ret) {
                             console.log(ret);
                             res.render('encode', {
                                 ts: ts
                             });
-                        });
+                       	  });
+			 });
                     }
                 }
             });
@@ -112,11 +133,15 @@ router.post('/decode', function(req, res) {
                         console.info('Call Shell Decode');
 
                         shell( '/usr/bin/python', [
-                            '/home/jeremy/BlindWaterMark/bwm.py',
+                            doc_path + 'script/watermark.py',
+			    '--cmd',
                             'decode',
+			    '--ori',
                             base_photo_new,
+			    '--im',
                             watermark_photo_new,
-                            '/home/jeremy/InvWatermark/public/photo/decoded_' + ts + '.png'
+			    '--res',
+                            doc_path + 'public/photo/decoded_' + ts + '.png'
                         ], function(ret) {
                             console.log(ret);
                             res.render('decode', {
@@ -134,9 +159,12 @@ router.post('/decode', function(req, res) {
 
 function shell (cmd, args, callback ) {
 
-	var spawn = require('child_process').spawn;
+    var spawn = require('child_process').spawn;
     var child = spawn(cmd, args);
     var resp = "";
+
+    console.log(cmd);
+    console.log(args);
 
     child.stdout.on('data', function (buffer) { 
         resp += buffer.toString() 
