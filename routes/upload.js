@@ -51,6 +51,8 @@ router.post('/encode', function(req, res) {
 
                         shell( '/usr/bin/python', [
                             doc_path + 'script/watermark.py',
+			    '--seed',
+			    '948700',
 			    '--cmd',
                             'encode',
 			    '--ori',
@@ -66,6 +68,8 @@ router.post('/encode', function(req, res) {
 
                           shell( '/usr/bin/python', [
                             doc_path + 'script/watermark.py',
+		 	    '--seed',
+                            '948700',
                             '--cmd',
                             'decode',
                             '--ori',
