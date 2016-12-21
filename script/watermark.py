@@ -41,7 +41,7 @@ class InvisibleWaterMark:
         img_f = numpy.fft.fft2(img)
 
         # 將頻率圖案 加上 浮水印雜訊 並且放大倍數
-        res = img_f + watermark_random * 3
+        res = img_f + watermark_random * 2
 
         # 將傅立葉頻率 轉換為圖片
         img_wm = numpy.real(numpy.fft.ifft2(res))
@@ -55,10 +55,10 @@ class InvisibleWaterMark:
 
         h, w = img.shape[0], img.shape[1]
 
-        # 將原始圖片 以及 浮水印圖片 進行傅立葉轉換，並且相減取得頻率
+        # 將原始圖片 以及 浮水印圖片 進行傅立葉轉換，並且相減取得頻率，之後放大頻率
         img_f = numpy.fft.fft2(img)
         img_wm_f = numpy.fft.fft2(img_wm)
-        watermark = numpy.real((img_f - img_wm_f))
+        watermark = numpy.real((img_f - img_wm_f) * 5)
         wm = numpy.zeros(watermark.shape)
 
         #  依照之前產生的亂數種子解密
