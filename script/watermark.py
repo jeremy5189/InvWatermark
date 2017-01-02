@@ -43,7 +43,7 @@ class InvisibleWaterMark:
         cv2.imwrite("/home/jeremy/InvWatermark/public/photo/debug_1.png", numpy.real(img_f), [int(cv2.IMWRITE_JPEG_QUALITY), 100])
 
         # 將頻率圖案 加上 浮水印雜訊 並且放大倍數
-        res = img_f + watermark_random * 3
+        res = img_f + watermark_random * 1.5
 
         # 將傅立葉頻率 轉換為圖片
         cv2.imwrite("/home/jeremy/InvWatermark/public/photo/debug_2.png", numpy.real(numpy.fft.fft2(watermark)), [int(cv2.IMWRITE_JPEG_QUALITY), 100])
@@ -76,7 +76,7 @@ class InvisibleWaterMark:
         img_f = numpy.fft.fft2(img)
         img_wm_f = numpy.fft.fft2(img_wm)
 
-        watermark = numpy.real((img_f - img_wm_f))
+        watermark = numpy.real((img_f - img_wm_f)*3)
         cv2.imwrite("/home/jeremy/InvWatermark/public/photo/debug_5.png", watermark, [int(cv2.IMWRITE_JPEG_QUALITY), 100])
         wm = numpy.zeros(watermark.shape)
 
